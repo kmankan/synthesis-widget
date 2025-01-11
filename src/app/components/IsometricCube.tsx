@@ -1,7 +1,7 @@
 const IsometricCube = ({ width = "50px", height = "50px" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 100 100"
+    viewBox="18 18 65 70"
     width={width}
     height={height}
   >
