@@ -3,6 +3,7 @@ import { motion, AnimatePresence, PanInfo } from "motion/react";
 import { useRef, useState } from "react";
 import AddBlock from "./AddBlock";
 import Stack from "./Stack";
+import ControlPanel from "./ControlPanel";
 
 export default function InteractiveStacks() {
   // use counters to track the number of blocks in each stack
@@ -44,16 +45,24 @@ export default function InteractiveStacks() {
   }
 
   return (
-    <div className="flex items-center gap-x-32">
-      <div className="flex flex-col items-center">
-        <Stack side="left" count={leftStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
-        <AddBlock side="left" count={leftStack} max_stack_size={MAX_STACK_SIZE} handleAddBlock={handleAddBlock} />
+    <div className="flex flex-col justify-center min-h-screen">
+      <div className="flex items-center gap-x-32" id="stacks-canvas">
+        {/* Left Stack */}
+        <div className="flex flex-col items-center">
+          <Stack side="left" count={leftStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
+          <AddBlock side="left" count={leftStack} max_stack_size={MAX_STACK_SIZE} handleAddBlock={handleAddBlock} />
+        </div>
+        {/* Comparison Symbol */}
+        <div className="text-4xl font-bold">{getComparisonSymbol(leftStack, rightStack)}</div>
+        {/* Right Stack */}
+        <div className="flex flex-col items-center">
+          <Stack side="right" count={rightStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
+          <AddBlock side="right" count={rightStack} max_stack_size={MAX_STACK_SIZE} handleAddBlock={handleAddBlock} />
+        </div>
       </div>
-      {/* Comparison Symbol */}
-      <div className="text-4xl font-bold">{getComparisonSymbol(leftStack, rightStack)}</div>
-      <div className="flex flex-col items-center">
-        <Stack side="right" count={rightStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
-        <AddBlock side="right" count={rightStack} max_stack_size={MAX_STACK_SIZE} handleAddBlock={handleAddBlock} />
+      {/* Control Panel */}
+      <div className="mt-10">
+        <ControlPanel leftStack={leftStack} rightStack={rightStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
       </div>
     </div>
   );
