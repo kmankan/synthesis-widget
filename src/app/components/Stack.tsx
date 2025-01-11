@@ -1,8 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import Block from "./Block";
-
-type Stacks = "left" | "right";
-type SetStacks = React.Dispatch<React.SetStateAction<number>>;
+import { Stacks, SetStacks } from "@/types";
 
 export default function Stack(
   { side, count, setLeftStack, setRightStack }:

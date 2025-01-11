@@ -12,3 +12,6 @@ export type DragInfo = {
     y: number;    // Speed of drag in pixels per second
   };
 }
+
+export type Stacks = "left" | "right";
+export type SetStacks = React.Dispatch<React.SetStateAction<number>>;
