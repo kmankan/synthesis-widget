@@ -4,10 +4,12 @@ import { useRef, useState } from "react";
 import AddBlock from "./AddBlock";
 import Stack from "./Stack";
 import ControlPanel from "./ControlPanel";
+import ComparisonSymbol from "./ComparisonSymbol";
+
+export const MAX_STACK_SIZE = 10;
 
 export default function InteractiveStacks() {
   // use counters to track the number of blocks in each stack
-  const MAX_STACK_SIZE = 10;
   const [leftStack, setLeftStack] = useState<number>(4);
   const [leftBlocksAvailable, setLeftBlocksAvailable] = useState<number>(6);
   const [rightStack, setRightStack] = useState<number>(3);
@@ -16,13 +18,6 @@ export default function InteractiveStacks() {
   // Position Refs for the stacks
   const leftStackRef = useRef<HTMLDivElement>(null);
   const rightStackRef = useRef<HTMLDivElement>(null);
-
-  // get comparison symbol between stacks
-  const getComparisonSymbol = (leftStack: number, rightStack: number) => {
-    if (leftStack > rightStack) return ">";
-    if (leftStack < rightStack) return "<";
-    return "=";
-  };
 
   const isOverStack = (dragX: number, sourceStack: "left" | "right") => {
     // Get the target stack element
@@ -45,23 +40,24 @@ export default function InteractiveStacks() {
   }
 
   return (
-    <div className="flex flex-col justify-center min-h-screen">
-      <div className="flex items-center gap-x-32" id="stacks-canvas">
+    <div className="flex flex-col justify-center items-center min-h-screen w-full">
+      {/* Fix the stacks canvas in the horizontal center of the screen and */}
+      <div className="flex items-center gap-x-32 fixed top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-gray-300 rounded-md" id="stacks-canvas">
         {/* Left Stack */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center border-2 border-gray-300 rounded-md">
           <Stack side="left" count={leftStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
-          <AddBlock side="left" count={leftStack} max_stack_size={MAX_STACK_SIZE} handleAddBlock={handleAddBlock} />
         </div>
         {/* Comparison Symbol */}
-        <div className="text-4xl font-bold">{getComparisonSymbol(leftStack, rightStack)}</div>
+        <div>
+          <ComparisonSymbol leftStack={leftStack} rightStack={rightStack} />
+        </div>
         {/* Right Stack */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center border-2 border-gray-300 rounded-md">
           <Stack side="right" count={rightStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
-          <AddBlock side="right" count={rightStack} max_stack_size={MAX_STACK_SIZE} handleAddBlock={handleAddBlock} />
         </div>
       </div>
       {/* Control Panel */}
-      <div className="mt-10">
+      <div className="fixed bottom-0 left-0 right-0">
         <ControlPanel leftStack={leftStack} rightStack={rightStack} setLeftStack={setLeftStack} setRightStack={setRightStack} />
       </div>
     </div>
