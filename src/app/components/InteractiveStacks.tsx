@@ -13,6 +13,10 @@ interface LineState {
 }
 
 export default function InteractiveStacks() {
+  // set the mode of interaction
+  const [mode, setMode] = useState<string>('addRemove');
+  // determine whether we're animating the comparison of stacks
+  const [animate, setAnimate] = useState<boolean>(false);
   // use counters to track the number of blocks in each stack
   const [leftStack, setLeftStack] = useState<number>(4);
   //const [leftBlocksAvailable, setLeftBlocksAvailable] = useState<number>(6);
@@ -93,7 +97,7 @@ export default function InteractiveStacks() {
     const elements = document.elementsFromPoint(e.clientX, e.clientY);
     // Find if we're over a valid connection point
     const targetElement = elements.find(el =>
-      (el as HTMLElement).id && // ? I dont get what goingon here
+      (el as HTMLElement).id && // ? I dont get what going on here
       (el as HTMLElement).id !== currentLine.startElement &&
       ((el as HTMLElement).id.startsWith('left-') ||
         (el as HTMLElement).id.startsWith('right-'))
@@ -197,6 +201,10 @@ export default function InteractiveStacks() {
           rightStack={rightStack}
           setLeftStack={setLeftStack}
           setRightStack={setRightStack}
+          setMode={setMode}
+          mode={mode}
+          animate={animate}
+          setAnimate={setAnimate}
         />
       </div>
     </div>
