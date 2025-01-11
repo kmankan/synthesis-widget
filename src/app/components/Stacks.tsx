@@ -34,11 +34,11 @@ export default function Stacks() {
     return dragX >= targetRect.left && dragX <= targetRect.right;
   };
 
-  const handleDragEnd = (stackSide: "left" | "right") => (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (whichStack: "left" | "right") => (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const threshold = 100;
-    // If dragged far enough in any direction, remove the box
+    // If dragged 100px in any direction, remove the block from the stack
     if (Math.abs(info.offset.x) > threshold || Math.abs(info.offset.y) > threshold) {
-      if (stackSide === 'left') {
+      if (whichStack === 'left') {
         setLeftStack(prev => prev - 1);
       } else {
         setRightStack(prev => prev - 1);
@@ -46,33 +46,71 @@ export default function Stacks() {
     }
   };
 
-  const handleAddBlock = (stackSide: "left" | "right") => {
-    if (stackSide === 'left' && leftStack < MAX_STACK_SIZE) {
+  const handleAddBlock = (whichStack: "left" | "right") => {
+    if (whichStack === 'left' && leftStack < MAX_STACK_SIZE) {
       setLeftStack(prev => prev + 1);
-    } else if (stackSide === 'right' && rightStack < MAX_STACK_SIZE) {
+    } else if (whichStack === 'right' && rightStack < MAX_STACK_SIZE) {
       setRightStack(prev => prev + 1);
     }
   }
 
-  const Box = ({ stackSide }: { stackSide: "left" | "right" }) => (
+  // create a block component that can be dragged
+  const Block = ({ whichStack }: { whichStack: "left" | "right" }) => (
     <motion.div
-      className="w-16 h-16 bg-blue-500 rounded-lg m-1 cursor-grab active:cursor-grabbing hover:brightness-110"
+      className="cursor-grab active:cursor-grabbing hover:brightness-110 border-2 border-gray-300"
       drag={true}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.1}
       whileHover={{ scale: 1.05 }}
       whileDrag={{ scale: 1.1 }}
-      onDragEnd={handleDragEnd(stackSide)}
+      onDragEnd={handleDragEnd(whichStack)}
       layout
-    />
+    >
+      <IsometricCube width="75px" height="75px" />
+    </motion.div>
   );
 
+  const renderBlocks = (count: number, whichStack: "left" | "right") => {
+    // an array to store the block components
+    const blocks = [];
+    // loop through the count and add n block components to the array
+    for (let i = 0; i < count; i++) {
+      blocks.push(<Block key={i} whichStack={whichStack} />);
+    }
+    return blocks;
+  }
 
+  const Stack = ({ side, count }: { side: "left" | "right", count: number }) => (
+    <div className="flex flex-col items-center">
+      <button
+        onClick={() => handleAddBlock(side)}
+        disabled={count >= MAX_STACK_SIZE}
+        className={`mt-4 px-4 py-2 rounded-lg ${count >= MAX_STACK_SIZE
+          ? 'bg-gray-300 cursor-not-allowed'
+          : 'bg-blue-500 hover:bg-blue-600'
+          } text-white font-bold`}
+      >
+        Add Block
+      </button>
+      <div className="mt-4 text-lg font-bold">Count: {count}</div>
+      <div className="flex flex-col-reverse items-center">
+        <AnimatePresence mode="popLayout">
+          {renderBlocks(count, side)}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
 
   return (
     <div className="flex flex-col items-center">
-      <h1>Stacks</h1>
-      <IsometricCube width="100px" height="100px" />
+      <div className="flex justify-center items-center gap-x-32">
+        <Stack side="left" count={leftStack} />
+
+        {/* Comparison Symbol */}
+        <div className="text-4xl font-bold">{getComparisonSymbol(leftStack, rightStack)}</div>
+
+        <Stack side="right" count={rightStack} />
+      </div>
     </div>
   );
 }
