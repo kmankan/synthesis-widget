@@ -28,7 +28,7 @@ export default function Block({ whichStack, setLeftStack, setRightStack }: {
 
   return (
     <motion.div
-      className="w-12 h-12 2xl:w-24 2xl:h-24 cursor-grab active:cursor-grabbing hover:brightness-110"
+      className="w-12 h-12 2xl:w-16 2xl:h-16  border-gray-300 cursor-grab active:cursor-grabbing hover:brightness-110"
       drag={true}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.1}

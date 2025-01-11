@@ -14,4 +14,12 @@ export type DragInfo = {
 }
 
 export type Stacks = "left" | "right";
+
 export type SetStacks = React.Dispatch<React.SetStateAction<number>>;
+
+export type Point = {
+  x: number;
+  y: number;
+  position: 'top' | 'bottom';
+  whichStack: Stacks;
+} | null;
