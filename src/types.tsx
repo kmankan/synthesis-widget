@@ -14,8 +14,8 @@ export type DragInfo = {
 }
 
 export type Stacks = "left" | "right";
+export type Mode = "addRemove" | "draw";
 export type SetStacks = React.Dispatch<React.SetStateAction<number>>;
-export type SetMode = React.Dispatch<React.SetStateAction<string>>;
 export type SetAnimate = React.Dispatch<React.SetStateAction<boolean>>;
 
 export type ControlPanelProps = {
@@ -23,8 +23,11 @@ export type ControlPanelProps = {
   rightStack: number;
   setLeftStack: SetStacks;
   setRightStack: SetStacks;
-  setMode: SetMode;
-  mode: string;
   animate: boolean;
   setAnimate: SetAnimate;
+}
+
+export type ModeControllerProps = {
+  mode: Mode;
+  setMode: (mode: Mode) => void;
 }

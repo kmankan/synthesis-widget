@@ -1,6 +1,7 @@
-import { SetStacks, SetMode, ControlPanelProps, SetAnimate } from "@/types";
+import type { SetStacks, ControlPanelProps, SetAnimate, ModeControllerProps } from "@/types";
 import { MAX_STACK_SIZE } from "./InteractiveStacks";
 import { SquarePlay } from "lucide-react";
+import { useModeStore } from "@/app/store/modeStore";
 
 // This controller allows the user to add or remove blocks from the stack
 const StackController = ({ stack, setStack }: { stack: number, setStack: SetStacks }) => {
@@ -23,7 +24,7 @@ const StackController = ({ stack, setStack }: { stack: number, setStack: SetStac
 
 // This controller allows the user to change the mode of interaction
 // Radio button version of the mode controller
-const ModeControllerRadio = ({ mode, setMode }: { mode: string, setMode: SetMode }) => {
+const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
   return (
     <div className="flex items-center justify-center gap-x-4">
       <label className="flex items-center gap-x-2">
@@ -50,20 +51,20 @@ const ModeControllerRadio = ({ mode, setMode }: { mode: string, setMode: SetMode
   )
 }
 // Drop down version of the mode controller
-const ModeControllerDropdown = ({ mode, setMode }: { mode: string, setMode: SetMode }) => {
-  return (
-    <div className="flex items-center justify-center">
-      <select
-        value={mode}
-        onChange={(e) => setMode(e.target.value)}
-        className="px-4 py-2 border-2 border-gray-300 rounded-md"
-      >
-        <option value="addRemove">Add or Remove</option>
-        <option value="draw">Draw</option>
-      </select>
-    </div>
-  )
-}
+// const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
+//   return (
+//     <div className="flex items-center justify-center">
+//       <select
+//         value={mode}
+//         onChange={(e) => setMode(e.target.value)}
+//         className="px-4 py-2 border-2 border-gray-300 rounded-md"
+//       >
+//         <option value="addRemove">Add or Remove</option>
+//         <option value="draw">Draw</option>
+//       </select>
+//     </div>
+//   )
+// }
 
 const AnimationController = ({ animate, setAnimate }: { animate: boolean, setAnimate: SetAnimate }) => {
   return (
@@ -77,7 +78,9 @@ const AnimationController = ({ animate, setAnimate }: { animate: boolean, setAni
 //  1. add/remove blocks from the stacks; 
 //  2. change the mode of interaction;
 //  3. animate the comparison of stacks
-export default function ControlPanel({ leftStack, rightStack, setLeftStack, setRightStack, setMode, mode, animate, setAnimate }: ControlPanelProps) {
+export default function ControlPanel({ leftStack, rightStack, setLeftStack, setRightStack, animate, setAnimate }: ControlPanelProps) {
+  const { mode, setMode } = useModeStore();
+
   return (
     <div className="w-[80%] mx-auto mb-4">
       <div className="flex justify-between items-center border-2 border-gray-300 rounded-md py-4">

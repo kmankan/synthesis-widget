@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Stack from "./Stack";
 import ControlPanel from "./ControlPanel";
 import ComparisonSymbol from "./ComparisonSymbol";
+import { useModeStore } from "@/app/store/modeStore";
 
 export const MAX_STACK_SIZE = 10;
 
@@ -14,7 +15,7 @@ interface LineState {
 
 export default function InteractiveStacks() {
   // set the mode of interaction
-  const [mode, setMode] = useState<string>('addRemove');
+  const { mode, setMode } = useModeStore();
   // determine whether we're animating the comparison of stacks
   const [animate, setAnimate] = useState<boolean>(false);
   // use counters to track the number of blocks in each stack
@@ -62,6 +63,8 @@ export default function InteractiveStacks() {
 
   // This function is called when a user starts dragging an element
   const handleDragStart = (e: PointerEvent, elementId: string) => {
+    // Only allow drawing if the control panel mode is set to draw
+    if (mode !== "draw") return;
     // Get the parent container that holds all the stacks
     const canvas = document.getElementById('stacks-canvas');
     if (!canvas) return;
@@ -86,6 +89,9 @@ export default function InteractiveStacks() {
 
   // This function is called when a user stops dragging an element
   const handleDragEnd = (e: PointerEvent) => {
+    // Only allow drawing if the control panel mode is set to draw
+    if (mode !== "draw") return;
+    // Return early if we're not currently drawing a line
     if (!currentLine.active) return;
 
     const canvas = document.getElementById('stacks-canvas');
@@ -201,8 +207,6 @@ export default function InteractiveStacks() {
           rightStack={rightStack}
           setLeftStack={setLeftStack}
           setRightStack={setRightStack}
-          setMode={setMode}
-          mode={mode}
           animate={animate}
           setAnimate={setAnimate}
         />
