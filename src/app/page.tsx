@@ -1,12 +1,10 @@
 'use client'
-import Image from "next/image";
-import { motion } from "motion/react";
-import Stacks from "./components/Stacks";
+import InteractiveStacks from "./components/InteractiveStacks";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <Stacks />
+      <InteractiveStacks />
     </div>
   );
 }
