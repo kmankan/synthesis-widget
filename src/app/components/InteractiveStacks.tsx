@@ -104,21 +104,24 @@ export default function InteractiveStacks() {
 
   useEffect(() => {
     if (animate) {
-      // Start the animation
+      // Get the animation element
       const animation = document.getElementById('flowAnimation');
-      // check that the element is the correct type
-      if (animation && animation instanceof SVGAnimateTransformElement) {
+      if (animation instanceof SVGAnimateTransformElement) {
+        // Conditionally set the from and to values based on the stack sizes
+        // This determines the flow of the animation gradient
+        //animation.setAttribute('from', leftStack >= rightStack ? "-100" : "100");
+        //animation.setAttribute('to', leftStack < rightStack ? "100" : "-100");
+        // Then begin the animation
         animation.beginElement();
       }
 
-      // Reset animate state after animation completes
       const timer = setTimeout(() => {
         setAnimate(false);
-      }, 8000); // Same duration as the animation
+      }, 4000);
 
       return () => clearTimeout(timer);
     }
-  }, [animate]);
+  }, [animate, leftStack, rightStack]);
 
   // This function is called when a user starts dragging an element
   const handleDragStart = (e: PointerEvent, elementId: string) => {
@@ -264,13 +267,15 @@ export default function InteractiveStacks() {
 
         {/* SVG overlay for all lines */}
         <svg
-          className="fixed inset-0 pointer-events-none"
+          className="fixed inset-0 pointer-events-none z-50"
           style={{ width: '100%', height: '100%' }}
         >
           {/* Add the filter definition */}
           <defs>
             {/* Gradient for normal state */}
-            <linearGradient id="iceGradient">
+            <linearGradient
+              id="iceGradient"
+              gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#A8DDFF" />
               <stop offset="50%" stopColor="#E8F4FF" />
               <stop offset="100%" stopColor="#A8DDFF" />
@@ -279,7 +284,7 @@ export default function InteractiveStacks() {
             {/* Gradient for animation state */}
             <linearGradient
               id="flowingGradient"
-              gradientUnits="objectBoundingBox"
+              gradientUnits="userSpaceOnUse"
             >
               <stop offset="0%" stopColor="#A8DDFF" />
               <stop offset="40%" stopColor="#A8DDFF" />
@@ -287,16 +292,29 @@ export default function InteractiveStacks() {
               <stop offset="60%" stopColor="#A8DDFF" />
               <stop offset="100%" stopColor="#A8DDFF" />
 
-              <animateTransform
-                attributeName="gradientTransform"
-                type="translate"
-                from={leftStack >= rightStack ? "-1" : "1"}  // Simplified using >=
-                to={leftStack > rightStack ? "1" : "-1"}
-                dur="2s"
-                repeatCount="2"
-                begin="indefinite"
-                id="flowAnimation"
-              />
+              {leftStack >= rightStack ? (
+                <animateTransform
+                  attributeName="gradientTransform"
+                  type="translate"
+                  from="-100"
+                  to="100"
+                  dur="2s"
+                  repeatCount="2"
+                  begin="indefinite"
+                  id="flowAnimation"
+                />
+              ) : (
+                <animateTransform
+                  attributeName="gradientTransform"
+                  type="translate"
+                  from="100"
+                  to="-100"
+                  dur="2s"
+                  repeatCount="2"
+                  begin="indefinite"
+                  id="flowAnimation"
+                />
+              )}
             </linearGradient>
           </defs>
 
