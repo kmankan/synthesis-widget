@@ -94,6 +94,7 @@ const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
 
   return (
     <div className="flex items-center justify-start gap-x-2 w-[220px]">
+      <span>Mode:</span>
       <select
         value={mode}
         onChange={(e) => {
