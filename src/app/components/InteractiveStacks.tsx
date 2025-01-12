@@ -15,7 +15,7 @@ interface LineState {
 
 export default function InteractiveStacks() {
   // set the mode of interaction
-  const { mode, setMode } = useModeStore();
+  const { mode } = useModeStore();
   // determine whether we're animating the comparison of stacks
   const [animate, setAnimate] = useState<boolean>(false);
   // use counters to track the number of blocks in each stack
