@@ -58,35 +58,37 @@ const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number,
   )
 }
 
-// This controller allows the user to change the mode of interaction
 // Radio button version of the mode controller
-const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
-  return (
-    <div className="flex items-center justify-center gap-x-4">
-      <label className="flex items-center gap-x-2">
-        <input
-          type="radio"
-          name="mode"
-          value="addRemove"
-          checked={mode === 'addRemove'}
-          onChange={() => setMode('addRemove')}
-        />
-        Stack
-      </label>
-      <label className="flex items-center gap-x-2">
-        <input
-          type="radio"
-          name="mode"
-          value="draw"
-          checked={mode === 'draw'}
-          onChange={() => setMode('draw')}
-        />
-        Draw
-      </label>
-    </div>
-  )
-}
+// This controller allows the user to change the mode of interaction
+// const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
+//   return (
+//     <div className="flex items-center justify-center gap-x-4">
+//       <label className="flex items-center gap-x-2">
+//         <input
+//           type="radio"
+//           name="mode"
+//           value="addRemove"
+//           checked={mode === 'addRemove'}
+//           onChange={() => setMode('addRemove')}
+//         />
+//         Stack
+//       </label>
+//       <label className="flex items-center gap-x-2">
+//         <input
+//           type="radio"
+//           name="mode"
+//           value="draw"
+//           checked={mode === 'draw'}
+//           onChange={() => setMode('draw')}
+//         />
+//         Draw
+//       </label>
+//     </div>
+//   )
+// }
+
 //Drop down version of the mode controller
+// This controller allows the user to change the mode of interaction
 const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
   return (
     <div className="flex items-center justify-center">
