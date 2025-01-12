@@ -84,7 +84,7 @@ export default function Stack({
   return (
     <div className="flex flex-col items-center gap-y-4">
       <DrawElement position="top" />
-      <div className="flex flex-col gap-y-2" id={`${side}-stack`}>
+      <div className="flex flex-col" id={`${side}-stack`}>
         <AnimatePresence mode="wait">
           {renderBlocks(count, side)}
         </AnimatePresence>
