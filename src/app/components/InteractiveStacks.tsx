@@ -15,7 +15,7 @@ interface LineState {
 
 export default function InteractiveStacks() {
   // set the mode of interaction
-  const { mode } = useModeStore();
+  const { mode, showLines } = useModeStore();
   // determine whether we're animating the comparison of stacks
   const [animate, setAnimate] = useState<boolean>(false);
   // use counters to track the number of blocks in each stack
@@ -270,7 +270,7 @@ export default function InteractiveStacks() {
           {/* SVG overlay for all lines */}
           <svg
             className="fixed inset-0 pointer-events-none z-50"
-            style={{ width: '100%', height: '100%' }}
+            style={{ width: '100%', height: '100%', display: showLines ? 'block' : 'none' }}
           >
             {/* Add the filter definition */}
             <defs>

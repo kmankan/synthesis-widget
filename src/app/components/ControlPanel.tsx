@@ -90,8 +90,10 @@ const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number,
 //Drop down version of the mode controller
 // This controller allows the user to change the mode of interaction
 const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
+  const { showLines, setShowLines } = useModeStore();
+
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-start gap-x-2 w-[220px]">
       <select
         value={mode}
         onChange={(e) => {
@@ -102,9 +104,35 @@ const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
         }}
         className="px-1 py-2 border-2 border-[#90c1df] bg-[#f2fbff5e] rounded-md"
       >
-        <option value="addRemove">Stack</option>
-        <option value="draw">Draw</option>
+        <option value="addRemove">Modify Stack</option>
+        <option value="draw">Draw Lines</option>
       </select>
+      {mode === 'draw' ? (
+        <div className="flex flex-col gap-y-1">
+          <label className="flex items-center gap-x-2">
+            <input
+              type="radio"
+              name="lineVisibility"
+              value="show"
+              checked={showLines}
+              onChange={() => setShowLines(true)}
+              className="w-4 h-4"
+            />
+            <span>Show</span>
+          </label>
+          <label className="flex items-center gap-x-2">
+            <input
+              type="radio"
+              name="lineVisibility"
+              value="hide"
+              checked={!showLines}
+              onChange={() => setShowLines(false)}
+              className="w-4 h-4"
+            />
+            <span>Hide</span>
+          </label>
+        </div>
+      ) : null}
     </div>
   )
 }
