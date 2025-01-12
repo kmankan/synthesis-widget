@@ -102,6 +102,24 @@ export default function InteractiveStacks() {
     }
   }, [mode]);
 
+  useEffect(() => {
+    if (animate) {
+      // Start the animation
+      const animation = document.getElementById('flowAnimation');
+      // check that the element is the correct type
+      if (animation && animation instanceof SVGAnimateTransformElement) {
+        animation.beginElement();
+      }
+
+      // Reset animate state after animation completes
+      const timer = setTimeout(() => {
+        setAnimate(false);
+      }, 8000); // Same duration as the animation
+
+      return () => clearTimeout(timer);
+    }
+  }, [animate]);
+
   // This function is called when a user starts dragging an element
   const handleDragStart = (e: PointerEvent, elementId: string) => {
     // Only allow drawing if the control panel mode is set to draw
@@ -131,6 +149,7 @@ export default function InteractiveStacks() {
 
   // This function is called when a user stops dragging an element
   const handleDragEnd = (e: PointerEvent) => {
+    console.log('handleDragEnd called', { mode, currentLine });
     if (mode !== "draw" || !currentLine.active) return;
 
     const canvas = document.getElementById('stacks-canvas');
@@ -138,12 +157,23 @@ export default function InteractiveStacks() {
 
     // Get canvas size/coordinate information relative to the viewport
     const canvasRect = canvas.getBoundingClientRect();
+    console.log('Canvas rect:', {
+      left: canvasRect.left,
+      top: canvasRect.top,
+      width: canvasRect.width,
+      height: canvasRect.height
+    });
+
     // Get an array of all DOM elements at coord XY, ordered by z-index
     const elements = document.elementsFromPoint(e.clientX, e.clientY);
+    console.log('Elements found at pointer position:', elements);
+    console.log('Mouse position:', { x: e.clientX, y: e.clientY });
 
     // Get the position (top/bottom) of the starting element
     // DrawElements have elementId = "left-top" or "left-bottom"
     const startPosition = currentLine.startElement?.split('-')[1]; // Will be 'top' or 'bottom'
+    console.log('Start position:', startPosition);
+    console.log('Start element:', currentLine.startElement);
 
     // Find if we're over a valid connection point with matching position
     const targetElement = elements.find(element => {
@@ -156,13 +186,36 @@ export default function InteractiveStacks() {
 
       // Check if the positions match (i.e. top-top or bottom-bottom)
       const targetPosition = element.id.split('-')[1]; // Will be 'top' or 'bottom'
+      console.log('Checking element:', {
+        id: isValidElement.id,
+        isValidTarget,
+        targetPosition,
+        matches: isValidTarget && targetPosition === startPosition
+      });
       return isValidTarget && targetPosition === startPosition;
     }) as HTMLElement;
+
+    console.log('Target element found:', targetElement);
 
     // If we found a valid target, create a permanent line
     if (targetElement) {
       // Get the position of the target element (relative to viewport)
       const targetRect = targetElement.getBoundingClientRect();
+      console.log('Target rect:', {
+        left: targetRect.left,
+        top: targetRect.top,
+        width: targetRect.width,
+        height: targetRect.height
+      });
+
+      const newEndPoint = {
+        x: targetRect.left - canvasRect.left + targetRect.width / 2,
+        y: targetRect.top - canvasRect.top + targetRect.height / 2
+      };
+      console.log('Creating permanent line with end point:', newEndPoint);
+      console.log('Current line state:', currentLine);
+      console.log('Existing lines:', lines);
+
       setLines(prev => [...prev, {
         ...currentLine,
         // Take the elements position and subtract the canvas position to get the relative position
@@ -216,15 +269,38 @@ export default function InteractiveStacks() {
         >
           {/* Add the filter definition */}
           <defs>
-            {/* Ice gradient */}
+            {/* Gradient for normal state */}
             <linearGradient id="iceGradient">
               <stop offset="0%" stopColor="#A8DDFF" />
               <stop offset="50%" stopColor="#E8F4FF" />
               <stop offset="100%" stopColor="#A8DDFF" />
             </linearGradient>
+
+            {/* Gradient for animation state */}
+            <linearGradient
+              id="flowingGradient"
+              gradientUnits="objectBoundingBox"
+            >
+              <stop offset="0%" stopColor="#A8DDFF" />
+              <stop offset="40%" stopColor="#A8DDFF" />
+              <stop offset="50%" stopColor="#FFFFFF" />
+              <stop offset="60%" stopColor="#A8DDFF" />
+              <stop offset="100%" stopColor="#A8DDFF" />
+
+              <animateTransform
+                attributeName="gradientTransform"
+                type="translate"
+                from={leftStack >= rightStack ? "-1" : "1"}  // Simplified using >=
+                to={leftStack > rightStack ? "1" : "-1"}
+                dur="2s"
+                repeatCount="2"
+                begin="indefinite"
+                id="flowAnimation"
+              />
+            </linearGradient>
           </defs>
 
-          {/* Draw the lines with glow */}
+          {/* Permanent lines with glow */}
           {lines.map((line, i) => (
             <line
               key={i}
@@ -232,13 +308,13 @@ export default function InteractiveStacks() {
               y1={line.start.y}
               x2={line.end.x}
               y2={line.end.y}
-              stroke="url(#iceGradient)"
+              stroke={animate ? "url(#flowingGradient)" : "url(#iceGradient)"}
               strokeWidth="14"
               strokeLinecap="round"
             />
           ))}
 
-          {/* Current drawing line */}
+          {/* Temporary drawing line (before connection is made) */}
           {currentLine.active && (
             <line
               x1={currentLine.start.x}

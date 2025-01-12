@@ -71,7 +71,7 @@ const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
           checked={mode === 'addRemove'}
           onChange={() => setMode('addRemove')}
         />
-        Add or Remove
+        Stack
       </label>
       <label className="flex items-center gap-x-2">
         <input
@@ -110,7 +110,7 @@ const AnimationController = ({ animate, setAnimate }: { animate: boolean, setAni
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
-      <SquarePlay strokeWidth={1.5} className="w-10 h-10 hover:fill-white" />
+      <SquarePlay strokeWidth={1.5} className="w-12 h-12 hover:fill-white" />
     </motion.button>
   )
 }
@@ -134,7 +134,7 @@ export default function ControlPanel({ leftStack, rightStack, setLeftStack, setR
           <StackController mode={mode} stack={rightStack} setStack={setRightStack} />
         </div>
         <div className="w-1/4 flex items-center justify-center">
-          <AnimationController animate={animate} setAnimate={setAnimate} />
+          {mode === 'draw' ? <AnimationController animate={animate} setAnimate={setAnimate} /> : null}
         </div>
       </div>
     </div>
