@@ -278,9 +278,9 @@ export default function InteractiveStacks() {
               <linearGradient
                 id="iceGradient"
                 gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#A8DDFF" />
-                <stop offset="50%" stopColor="#E8F4FF" />
-                <stop offset="100%" stopColor="#A8DDFF" />
+                <stop offset="0%" stopColor="#4FB3FF" />
+                <stop offset="50%" stopColor="#A8DDFF" />
+                <stop offset="100%" stopColor="#4FB3FF" />
               </linearGradient>
 
               {/* Gradient for animation state */}

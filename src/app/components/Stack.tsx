@@ -67,7 +67,7 @@ export default function Stack({
       ) : (
         <motion.div
           id={elementId}
-          className="w-12 h-12 2xl:w-16 2xl:h-16 hover:border-2 hover:border-sky-300 bg-sky-200 opacity-60 relative rounded-lg cursor-crosshair"
+          className="w-12 h-12 2xl:w-16 2xl:h-16 hover:border-2 hover:border-sky-300 bg-[#b9ddff] opacity-100 relative rounded-lg cursor-crosshair"
           onPointerDown={(e) => {
             e.currentTarget.setPointerCapture(e.pointerId);
             onDragStart(e as unknown as PointerEvent, elementId);
