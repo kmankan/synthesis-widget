@@ -1,5 +1,7 @@
 # Synthesis Widget
 
+![Synthesis Widget](public/block-widget-screenshot.png)
+
 A dynamic, interactive widget for teaching numerical comparison concepts using stackable blocks.
 
 ## Features

@@ -15,7 +15,7 @@ interface LineState {
 
 export default function InteractiveStacks() {
   // set the mode of interaction
-  const { mode } = useModeStore();
+  const { mode, showLines } = useModeStore();
   // determine whether we're animating the comparison of stacks
   const [animate, setAnimate] = useState<boolean>(false);
   // use counters to track the number of blocks in each stack
@@ -237,7 +237,7 @@ export default function InteractiveStacks() {
     <div className="flex flex-col justify-center items-center">
       <div className="fixed w-full h-screen" id="stacks-canvas">
         {/* Use relative positioning for the container */}
-        <div className="relative h-full -mt-4">
+        <div className="relative h-full -mt-8">
           {/* Left Stack - positioned at 1/3 from left */}
           <div className="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
             <Stack
@@ -270,7 +270,7 @@ export default function InteractiveStacks() {
           {/* SVG overlay for all lines */}
           <svg
             className="fixed inset-0 pointer-events-none z-50"
-            style={{ width: '100%', height: '100%' }}
+            style={{ width: '100%', height: '100%', display: showLines ? 'block' : 'none' }}
           >
             {/* Add the filter definition */}
             <defs>

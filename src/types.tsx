@@ -30,4 +30,6 @@ export type ControlPanelProps = {
 export type ModeControllerProps = {
   mode: Mode;
   setMode: (mode: Mode) => void;
+  showLines: boolean;
+  setShowLines: (showLines: boolean) => void;
 }
