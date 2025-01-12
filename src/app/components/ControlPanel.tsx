@@ -35,14 +35,14 @@ const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number,
           className="disabled:opacity-10 disabled:cursor-not-allowed text-lg font-bold"
         >-</button>
       </div>
-      <div className="flex items-center justify-center text-lg font-bold border-4 border-sky-100 rounded-md w-12 py-1">
+      <div className="flex items-center justify-center text-2xl font-bold border-2 border-[#90c1df] rounded-md w-12 py-1">
         <input
           type="number"
           value={inputValue}
           min={0}
           max={MAX_STACK_SIZE}
           onChange={handleInputChange}
-          className="text-center bg-[#f2fbff] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="text-center bg-[#f2fbff0a] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           disabled={mode === 'draw'}
         />
         {/* {stack} */}
@@ -123,14 +123,14 @@ export default function ControlPanel({ leftStack, rightStack, setLeftStack, setR
   const { mode, setMode } = useModeStore();
 
   return (
-    <div className="w-[80%] mx-auto mb-4">
-      <div className="flex justify-between items-center bg-[#f2fbff] border-4 border-sky-100 rounded-md py-4">
+    <div className="w-[90%] mx-auto mb-4">
+      <div className="flex justify-between items-center bg-[#f2fbff5e] border-2 border-sky-100 rounded-md py-4">
         <div className="w-1/4 flex items-center justify-center">
           <ModeControllerRadio mode={mode} setMode={setMode} />
         </div>
-        <div className="w-2/4 flex items-center justify-center gap-x-28">
+        {/* Container for stack controllers */}
+        <div className="grow flex items-center justify-between px-11">
           <StackController mode={mode} stack={leftStack} setStack={setLeftStack} />
-          <div className="p-6"></div>
           <StackController mode={mode} stack={rightStack} setStack={setRightStack} />
         </div>
         <div className="w-1/4 flex items-center justify-center">

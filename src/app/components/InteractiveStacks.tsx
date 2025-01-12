@@ -234,117 +234,120 @@ export default function InteractiveStacks() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-full">
-      <div className="flex items-center gap-x-32 fixed top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8" id="stacks-canvas">
-        {/* Left Stack */}
-        <div className="flex flex-col items-center">
-          <Stack
-            side="left"
-            count={leftStack}
-            setLeftStack={setLeftStack}
-            setRightStack={setRightStack}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          />
-        </div>
-
-        {/* Comparison Symbol */}
-        <div>
-          <ComparisonSymbol leftStack={leftStack} rightStack={rightStack} />
-        </div>
-
-        {/* Right Stack */}
-        <div className="flex flex-col items-center">
-          <Stack
-            side="right"
-            count={rightStack}
-            setLeftStack={setLeftStack}
-            setRightStack={setRightStack}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          />
-        </div>
-
-        {/* SVG overlay for all lines */}
-        <svg
-          className="fixed inset-0 pointer-events-none z-50"
-          style={{ width: '100%', height: '100%' }}
-        >
-          {/* Add the filter definition */}
-          <defs>
-            {/* Gradient for normal state */}
-            <linearGradient
-              id="iceGradient"
-              gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#A8DDFF" />
-              <stop offset="50%" stopColor="#E8F4FF" />
-              <stop offset="100%" stopColor="#A8DDFF" />
-            </linearGradient>
-
-            {/* Gradient for animation state */}
-            <linearGradient
-              id="flowingGradient"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop offset="0%" stopColor="#A8DDFF" />
-              <stop offset="40%" stopColor="#A8DDFF" />
-              <stop offset="50%" stopColor="#FFFFFF" />
-              <stop offset="60%" stopColor="#A8DDFF" />
-              <stop offset="100%" stopColor="#A8DDFF" />
-
-              {leftStack >= rightStack ? (
-                <animateTransform
-                  attributeName="gradientTransform"
-                  type="translate"
-                  from="-100"
-                  to="100"
-                  dur="2s"
-                  repeatCount="2"
-                  begin="indefinite"
-                  id="flowAnimation"
-                />
-              ) : (
-                <animateTransform
-                  attributeName="gradientTransform"
-                  type="translate"
-                  from="100"
-                  to="-100"
-                  dur="2s"
-                  repeatCount="2"
-                  begin="indefinite"
-                  id="flowAnimation"
-                />
-              )}
-            </linearGradient>
-          </defs>
-
-          {/* Permanent lines with glow */}
-          {lines.map((line, i) => (
-            <line
-              key={i}
-              x1={line.start.x}
-              y1={line.start.y}
-              x2={line.end.x}
-              y2={line.end.y}
-              stroke={animate ? "url(#flowingGradient)" : "url(#iceGradient)"}
-              strokeWidth="14"
-              strokeLinecap="round"
+    <div className="flex flex-col justify-center items-center">
+      <div className="fixed w-full h-screen" id="stacks-canvas">
+        {/* Use relative positioning for the container */}
+        <div className="relative h-full">
+          {/* Left Stack - positioned at 1/3 from left */}
+          <div className="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+            <Stack
+              side="left"
+              count={leftStack}
+              setLeftStack={setLeftStack}
+              setRightStack={setRightStack}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
             />
-          ))}
+          </div>
 
-          {/* Temporary drawing line (before connection is made) */}
-          {currentLine.active && (
-            <line
-              x1={currentLine.start.x}
-              y1={currentLine.start.y}
-              x2={currentLine.end.x}
-              y2={currentLine.end.y}
-              stroke="#A8DDFF"
-              strokeWidth="4"
-              strokeDasharray="4"
+          {/* Comparison Symbol - centered */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <ComparisonSymbol leftStack={leftStack} rightStack={rightStack} />
+          </div>
+
+          {/* Right Stack - positioned at 2/3 from left (1/3 from right) */}
+          <div className="absolute left-2/3 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+            <Stack
+              side="right"
+              count={rightStack}
+              setLeftStack={setLeftStack}
+              setRightStack={setRightStack}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
             />
-          )}
-        </svg>
+          </div>
+
+          {/* SVG overlay for all lines */}
+          <svg
+            className="fixed inset-0 pointer-events-none z-50"
+            style={{ width: '100%', height: '100%' }}
+          >
+            {/* Add the filter definition */}
+            <defs>
+              {/* Gradient for normal state */}
+              <linearGradient
+                id="iceGradient"
+                gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#A8DDFF" />
+                <stop offset="50%" stopColor="#E8F4FF" />
+                <stop offset="100%" stopColor="#A8DDFF" />
+              </linearGradient>
+
+              {/* Gradient for animation state */}
+              <linearGradient
+                id="flowingGradient"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop offset="0%" stopColor="#A8DDFF" />
+                <stop offset="40%" stopColor="#A8DDFF" />
+                <stop offset="50%" stopColor="#FFFFFF" />
+                <stop offset="60%" stopColor="#A8DDFF" />
+                <stop offset="100%" stopColor="#A8DDFF" />
+
+                {leftStack >= rightStack ? (
+                  <animateTransform
+                    attributeName="gradientTransform"
+                    type="translate"
+                    from="-100"
+                    to="100"
+                    dur="2s"
+                    repeatCount="2"
+                    begin="indefinite"
+                    id="flowAnimation"
+                  />
+                ) : (
+                  <animateTransform
+                    attributeName="gradientTransform"
+                    type="translate"
+                    from="100"
+                    to="-100"
+                    dur="2s"
+                    repeatCount="2"
+                    begin="indefinite"
+                    id="flowAnimation"
+                  />
+                )}
+              </linearGradient>
+            </defs>
+
+            {/* Permanent lines with glow */}
+            {lines.map((line, i) => (
+              <line
+                key={i}
+                x1={line.start.x}
+                y1={line.start.y}
+                x2={line.end.x}
+                y2={line.end.y}
+                stroke={animate ? "url(#flowingGradient)" : "url(#iceGradient)"}
+                strokeWidth="14"
+                strokeLinecap="round"
+              />
+            ))}
+
+            {/* Temporary drawing line (before connection is made) */}
+            {currentLine.active && (
+              <line
+                x1={currentLine.start.x}
+                y1={currentLine.start.y}
+                x2={currentLine.end.x}
+                y2={currentLine.end.y}
+                stroke="#A8DDFF"
+                strokeWidth="4"
+                strokeDasharray="4"
+              />
+            )}
+          </svg>
+        </div>
       </div>
 
       {/* Control Panel */}
