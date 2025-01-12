@@ -70,12 +70,13 @@ export default function InteractiveStacks() {
     if (!canvas) return;
 
     // Get the positions of both the canvas and the element we clicked
-    const canvasRect = canvas.getBoundingClientRect(); // ? What exactly does this get back as values?
+    const canvasRect = canvas.getBoundingClientRect();
     const targetRect = (e.target as HTMLElement).getBoundingClientRect();
 
     // Calculate where the line should start, relative to our canvas
-    // We subtract canvasRect.left/top to convert from page coordinates to canvas coordinates
-    const centerX = targetRect.left - canvasRect.left + targetRect.width / 2; // ? I don't get why we do this calculation
+    // Take the elements position and subtract the canvas position to get the relative position
+    // We add the width/height of the element to get the center of the element
+    const centerX = targetRect.left - canvasRect.left + targetRect.width / 2;
     const centerY = targetRect.top - canvasRect.top + targetRect.height / 2;
 
     // Start drawing a new line from this point
@@ -89,34 +90,45 @@ export default function InteractiveStacks() {
 
   // This function is called when a user stops dragging an element
   const handleDragEnd = (e: PointerEvent) => {
-    // Only allow drawing if the control panel mode is set to draw
-    if (mode !== "draw") return;
-    // Return early if we're not currently drawing a line
-    if (!currentLine.active) return;
+    if (mode !== "draw" || !currentLine.active) return;
 
     const canvas = document.getElementById('stacks-canvas');
     if (!canvas) return;
 
+    // Get canvas size/coordinate information relative to the viewport
     const canvasRect = canvas.getBoundingClientRect();
-
-    // 
+    // Get an array of all DOM elements at coord XY, ordered by z-index
     const elements = document.elementsFromPoint(e.clientX, e.clientY);
-    // Find if we're over a valid connection point
-    const targetElement = elements.find(el =>
-      (el as HTMLElement).id && // ? I dont get what going on here
-      (el as HTMLElement).id !== currentLine.startElement &&
-      ((el as HTMLElement).id.startsWith('left-') ||
-        (el as HTMLElement).id.startsWith('right-'))
-    ) as HTMLElement;
+
+    // Get the position (top/bottom) of the starting element
+    // DrawElements have elementId = "left-top" or "left-bottom"
+    const startPosition = currentLine.startElement?.split('-')[1]; // Will be 'top' or 'bottom'
+
+    // Find if we're over a valid connection point with matching position
+    const targetElement = elements.find(element => {
+      const isValidElement = element as HTMLElement;
+      if (!isValidElement.id) return false;
+
+      // Check if it's a different element than start and is a valid stack element
+      const isValidTarget = element.id !== currentLine.startElement &&
+        (element.id.startsWith('left-') || element.id.startsWith('right-'));
+
+      // Check if the positions match (i.e. top-top or bottom-bottom)
+      const targetPosition = element.id.split('-')[1]; // Will be 'top' or 'bottom'
+      return isValidTarget && targetPosition === startPosition;
+    }) as HTMLElement;
 
     // If we found a valid target, create a permanent line
     if (targetElement) {
+      // Get the position of the target element (relative to viewport)
       const targetRect = targetElement.getBoundingClientRect();
       setLines(prev => [...prev, {
         ...currentLine,
+        // Take the elements position and subtract the canvas position to get the relative position
+        // We add the width/height of the element to get the center of the element
         end: {
-          x: targetRect.left - canvasRect.left + targetRect.width / 2,
-          y: targetRect.top - canvasRect.top + targetRect.height / 2
+          x: targetRect.left - canvasRect.left + targetRect.width / 2, // gives the x-coord of the center of the element
+          y: targetRect.top - canvasRect.top + targetRect.height / 2 // gives the y-coord of the center of the element
         }
       }]);
     }
