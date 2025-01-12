@@ -89,8 +89,7 @@ const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number,
 
 //Drop down version of the mode controller
 // This controller allows the user to change the mode of interaction
-const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
-  const { showLines, setShowLines } = useModeStore();
+const ModeControllerDropdown = ({ mode, setMode, showLines, setShowLines }: ModeControllerProps) => {
 
   return (
     <div className="flex items-center justify-start gap-x-2 w-[220px]">
@@ -161,13 +160,14 @@ const AnimationController = ({ animate, setAnimate }: { animate: boolean, setAni
 //  2. change the mode of interaction;
 //  3. animate the comparison of stacks
 export default function ControlPanel({ leftStack, rightStack, setLeftStack, setRightStack, animate, setAnimate }: ControlPanelProps) {
-  const { mode, setMode } = useModeStore();
+  const { mode, setMode, showLines, setShowLines } = useModeStore();
+
 
   return (
     <div className="w-[90%] mx-auto mb-3">
       <div className="flex justify-between items-center bg-[#f2fbff5e] border-2 border-sky-100 rounded-md h-[80px]">
         <div className="w-1/4 flex items-center justify-center">
-          <ModeControllerDropdown mode={mode} setMode={setMode} />
+          <ModeControllerDropdown mode={mode} setMode={setMode} showLines={showLines} setShowLines={setShowLines} />
         </div>
         {/* Container for stack controllers */}
         <div className="grow flex items-center justify-between px-11">
