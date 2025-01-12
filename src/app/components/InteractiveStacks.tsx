@@ -126,9 +126,9 @@ export default function InteractiveStacks() {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen w-full">
-      <div className="flex items-center gap-x-32 fixed top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-gray-300 rounded-md p-8" id="stacks-canvas">
+      <div className="flex items-center gap-x-32 fixed top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8" id="stacks-canvas">
         {/* Left Stack */}
-        <div className="flex flex-col items-center border-2 border-gray-300 rounded-md p-4">
+        <div className="flex flex-col items-center">
           <Stack
             side="left"
             count={leftStack}
@@ -145,7 +145,7 @@ export default function InteractiveStacks() {
         </div>
 
         {/* Right Stack */}
-        <div className="flex flex-col items-center border-2 border-gray-300 rounded-md p-4">
+        <div className="flex flex-col items-center">
           <Stack
             side="right"
             count={rightStack}

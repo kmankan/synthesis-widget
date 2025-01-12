@@ -37,7 +37,7 @@ export default function Block({ whichStack, setLeftStack, setRightStack }: {
       onDragEnd={handleDragEnd(whichStack)}
       layout
       animate={{
-        y: [0, -2, 0],  // Array defines keyframes: start, middle, end positions
+        y: [0, -6, 0],  // Array defines keyframes: start, middle, end positions
         transition: {
           duration: 2,    // One bounce cycle takes 2 seconds
           repeat: Infinity,  // Keep bouncing forever

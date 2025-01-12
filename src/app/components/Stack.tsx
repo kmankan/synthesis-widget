@@ -56,18 +56,18 @@ export default function Stack({
       mode === "addRemove" ? (
         <button
           id={elementId}
-          className="w-12 h-12 2xl:w-16 2xl:h-16 hover:border-2 hover:border-sky-50 hover:bg-sky-50 relative rounded-lg cursor-pointer flex items-center justify-center disabled:opacity-0 disabled:cursor-not-allowed"
+          className="w-12 h-12 2xl:w-16 2xl:h-16 hover:border-2 hover:border-sky-300 hover:bg-sky-100 relative rounded-lg cursor-pointer flex items-center justify-center disabled:opacity-0 disabled:cursor-not-allowed"
           disabled={count >= MAX_STACK_SIZE}
           onClick={() => {
             handleAddBlock();
           }}
         >
-          <Plus className="w-6 h-6 text-sky-100" />
+          <Plus className="w-6 h-6 text-sky-300" />
         </button>
       ) : (
         <motion.div
           id={elementId}
-          className="w-12 h-12 2xl:w-16 2xl:h-16 hover:border-2 hover:border-sky-100 bg-sky-50 relative rounded-lg cursor-crosshair"
+          className="w-12 h-12 2xl:w-16 2xl:h-16 hover:border-2 hover:border-sky-300 bg-sky-200 opacity-60 relative rounded-lg cursor-crosshair"
           onPointerDown={(e) => {
             e.currentTarget.setPointerCapture(e.pointerId);
             onDragStart(e as unknown as PointerEvent, elementId);
