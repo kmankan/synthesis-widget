@@ -2,9 +2,30 @@ import type { SetStacks, ControlPanelProps, SetAnimate, ModeControllerProps, Mod
 import { MAX_STACK_SIZE } from "./InteractiveStacks";
 import { SquarePlay } from "lucide-react";
 import { useModeStore } from "@/app/store/modeStore";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 // This controller allows the user to add or remove blocks from the stack
 const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number, setStack: SetStacks }) => {
+  const [inputValue, setInputValue] = useState<string>(stack.toString()); // needs to be a string to handle empty input
+
+  // Update the input value when the stack number changes
+  useEffect(() => {
+    setInputValue(stack.toString());
+  }, [stack]);
+
+  // Update the stack number when the input value changes to a valid number
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInputValue = e.target.value;
+    setInputValue(newInputValue);
+
+    const newStackValue = parseInt(newInputValue); // parseInt will return NaN if the input is not a number
+    // make sure the input is a number, and within the range of 0 to MAX_STACK_SIZE
+    if (!isNaN(newStackValue) && newStackValue >= 0 && newStackValue <= MAX_STACK_SIZE) {
+      setStack(newStackValue);
+    }
+  }
+
   return (
     <div className="flex items-center justify-center gap-x-1">
       <div className="flex items-center justify-center w-3">
@@ -14,17 +35,17 @@ const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number,
           className="disabled:opacity-10 disabled:cursor-not-allowed text-lg font-bold"
         >-</button>
       </div>
-      <div className="flex items-center justify-center text-lg font-bold border-2 border-gray-300 rounded-md w-12 py-1">
-        {/* <input
+      <div className="flex items-center justify-center text-lg font-bold border-4 border-sky-100 rounded-md w-12 py-1">
+        <input
           type="number"
-          value={stack}
+          value={inputValue}
           min={0}
           max={MAX_STACK_SIZE}
-          onChange={(e) => setStack(parseInt(e.target.value))}
+          onChange={handleInputChange}
           className="text-center bg-[#f2fbff] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           disabled={mode === 'draw'}
-        /> */}
-        {stack}
+        />
+        {/* {stack} */}
       </div>
       <div className="flex items-center justify-center w-3">
         <button
@@ -83,9 +104,14 @@ const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
 
 const AnimationController = ({ animate, setAnimate }: { animate: boolean, setAnimate: SetAnimate }) => {
   return (
-    <button onClick={() => setAnimate(!animate)}>
-      <SquarePlay strokeWidth={1.5} className="w-10 h-10" />
-    </button>
+    <motion.button
+      onClick={() => setAnimate(!animate)}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <SquarePlay strokeWidth={1.5} className="w-10 h-10 hover:fill-white" />
+    </motion.button>
   )
 }
 

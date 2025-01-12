@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import IsometricCube from "./IsometricCube";
 import { PanInfo } from "motion/react";
+import { useModeStore } from "@/app/store/modeStore";
 
 type Stacks = "left" | "right";
 type SetStacks = React.Dispatch<React.SetStateAction<number>>;
@@ -13,6 +14,7 @@ export default function Block({ whichStack, setLeftStack, setRightStack }: {
   setLeftStack: SetStacks,
   setRightStack: SetStacks
 }) {
+  const { mode } = useModeStore();
   const handleDragEnd: DragEndHandler = (whichStack: Stacks) =>
     (_event: InteractionEvents, info: PanInfo) => {
       const threshold = 1;
@@ -29,7 +31,7 @@ export default function Block({ whichStack, setLeftStack, setRightStack }: {
   return (
     <motion.div
       className="w-12 h-12 2xl:w-24 2xl:h-24 cursor-grab active:cursor-grabbing hover:brightness-110"
-      drag={true}
+      drag={mode !== 'draw'} // Only allow dragging in AddRemove mode
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.1}
       whileHover={{ scale: 1.05 }}
