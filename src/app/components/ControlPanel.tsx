@@ -6,19 +6,34 @@ import { useModeStore } from "@/app/store/modeStore";
 // This controller allows the user to add or remove blocks from the stack
 const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number, setStack: SetStacks }) => {
   return (
-    <div className="flex items-center justify-center gap-x-2">
-      <button
-        onClick={() => setStack(stack - 1)}
-        disabled={stack === 0 || mode === 'draw'}
-        className="disabled:opacity-10 disabled:cursor-not-allowed text-xl font-bold"
-      >-</button>
-      <div className="text-lg font-bold border-2 border-gray-300 rounded-md px-4 py-1">{stack}</div>
-      <button
-        onClick={() => setStack(stack + 1)}
-        disabled={stack === MAX_STACK_SIZE || mode === 'draw'}
-        className="disabled:opacity-10 disabled:cursor-not-allowed text-xl font-bold"
-      >+</button>
-    </div >
+    <div className="flex items-center justify-center gap-x-1">
+      <div className="flex items-center justify-center w-3">
+        <button
+          onClick={() => setStack(stack - 1)}
+          disabled={stack === 0 || mode === 'draw'}
+          className="disabled:opacity-10 disabled:cursor-not-allowed text-lg font-bold"
+        >-</button>
+      </div>
+      <div className="flex items-center justify-center text-lg font-bold border-2 border-gray-300 rounded-md w-12 py-1">
+        {/* <input
+          type="number"
+          value={stack}
+          min={0}
+          max={MAX_STACK_SIZE}
+          onChange={(e) => setStack(parseInt(e.target.value))}
+          className="text-center bg-[#f2fbff] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          disabled={mode === 'draw'}
+        /> */}
+        {stack}
+      </div>
+      <div className="flex items-center justify-center w-3">
+        <button
+          onClick={() => setStack(stack + 1)}
+          disabled={stack === MAX_STACK_SIZE || mode === 'draw'}
+          className="disabled:opacity-10 disabled:cursor-not-allowed text-lg font-bold"
+        >+</button>
+      </div >
+    </div>
   )
 }
 
@@ -51,7 +66,7 @@ const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
   )
 }
 // Drop down version of the mode controller
-// const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
+// const ModeControllerDropdown = ({mode, setMode}: ModeControllerProps) => {
 //   return (
 //     <div className="flex items-center justify-center">
 //       <select
@@ -87,7 +102,7 @@ export default function ControlPanel({ leftStack, rightStack, setLeftStack, setR
         <div className="w-1/4 flex items-center justify-center">
           <ModeControllerRadio mode={mode} setMode={setMode} />
         </div>
-        <div className="w-2/4 flex items-center justify-center gap-x-32">
+        <div className="w-2/4 flex items-center justify-center gap-x-28">
           <StackController mode={mode} stack={leftStack} setStack={setLeftStack} />
           <div className="p-6"></div>
           <StackController mode={mode} stack={rightStack} setStack={setRightStack} />

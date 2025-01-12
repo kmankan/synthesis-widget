@@ -39,6 +39,7 @@ export default function InteractiveStacks() {
   });
 
   // Track the mouse position and update the line end point
+  // Runs when the user starts or stops drawing
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
       if (currentLine.active) { // only track if we're drawing
@@ -60,6 +61,38 @@ export default function InteractiveStacks() {
     window.addEventListener('pointermove', handlePointerMove);
     return () => window.removeEventListener('pointermove', handlePointerMove);
   }, [currentLine.active]);
+
+  // Track where the user clicks and reset the line if no valid target is found
+  // Runs when it detects starting or stopping of the draw line
+  useEffect(() => {
+    const handleWindowClick = (e: MouseEvent) => {
+      if (!currentLine.active) return;
+
+      // Get elements under click
+      const elements = document.elementsFromPoint(e.clientX, e.clientY);
+
+      // Check if we clicked a valid target
+      const startPosition = currentLine.startElement?.split('-')[1];
+      const hasValidTarget = elements.some(el => {
+        const element = el as HTMLElement;
+        if (!element.id) return false;
+
+        const isValidTarget = element.id !== currentLine.startElement &&
+          (element.id.startsWith('left-') || element.id.startsWith('right-'));
+
+        const targetPosition = element.id.split('-')[1];
+        return isValidTarget && targetPosition === startPosition;
+      });
+
+      // If no valid target found, reset the line
+      if (!hasValidTarget) {
+        setCurrentLine(prev => ({ ...prev, active: false }));
+      }
+    };
+
+    window.addEventListener('click', handleWindowClick);
+    return () => window.removeEventListener('click', handleWindowClick);
+  }, [currentLine.active, currentLine.startElement]);
 
   // This function is called when a user starts dragging an element
   const handleDragStart = (e: PointerEvent, elementId: string) => {
