@@ -237,7 +237,7 @@ export default function InteractiveStacks() {
     <div className="flex flex-col justify-center items-center">
       <div className="fixed w-full h-screen" id="stacks-canvas">
         {/* Use relative positioning for the container */}
-        <div className="relative h-full -mt-4">
+        <div className="relative h-full -mt-8">
           {/* Left Stack - positioned at 1/3 from left */}
           <div className="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
             <Stack

@@ -86,32 +86,42 @@ const ModeControllerRadio = ({ mode, setMode }: ModeControllerProps) => {
     </div>
   )
 }
-// Drop down version of the mode controller
-// const ModeControllerDropdown = ({mode, setMode}: ModeControllerProps) => {
-//   return (
-//     <div className="flex items-center justify-center">
-//       <select
-//         value={mode}
-//         onChange={(e) => setMode(e.target.value)}
-//         className="px-4 py-2 border-2 border-gray-300 rounded-md"
-//       >
-//         <option value="addRemove">Add or Remove</option>
-//         <option value="draw">Draw</option>
-//       </select>
-//     </div>
-//   )
-// }
+//Drop down version of the mode controller
+const ModeControllerDropdown = ({ mode, setMode }: ModeControllerProps) => {
+  return (
+    <div className="flex items-center justify-center">
+      <select
+        value={mode}
+        onChange={(e) => {
+          const value = e.target.value;
+          if (value === 'addRemove' || value === 'draw') {
+            setMode(value);
+          }
+        }}
+        className="px-1 py-2 border-2 border-[#90c1df] bg-[#f2fbff5e] rounded-md"
+      >
+        <option value="addRemove">Stack</option>
+        <option value="draw">Draw</option>
+      </select>
+    </div>
+  )
+}
 
 const AnimationController = ({ animate, setAnimate }: { animate: boolean, setAnimate: SetAnimate }) => {
   return (
-    <motion.button
-      onClick={() => setAnimate(!animate)}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 400, damping: 17 }}
-    >
-      <SquarePlay strokeWidth={1.5} className="w-12 h-12 hover:fill-white" />
-    </motion.button>
+    <div className="flex flex-col items-center justify-center">
+      <motion.button
+        onClick={() => setAnimate(!animate)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      >
+        <SquarePlay strokeWidth={1.5} className="w-12 h-12 hover:fill-white" />
+      </motion.button>
+      <p className="text-sm text-center">Animate</p>
+    </div>
+
+
   )
 }
 
@@ -123,10 +133,10 @@ export default function ControlPanel({ leftStack, rightStack, setLeftStack, setR
   const { mode, setMode } = useModeStore();
 
   return (
-    <div className="w-[90%] mx-auto mb-4">
-      <div className="flex justify-between items-center bg-[#f2fbff5e] border-2 border-sky-100 rounded-md py-4">
+    <div className="w-[90%] mx-auto mb-3">
+      <div className="flex justify-between items-center bg-[#f2fbff5e] border-2 border-sky-100 rounded-md h-[80px]">
         <div className="w-1/4 flex items-center justify-center">
-          <ModeControllerRadio mode={mode} setMode={setMode} />
+          <ModeControllerDropdown mode={mode} setMode={setMode} />
         </div>
         {/* Container for stack controllers */}
         <div className="grow flex items-center justify-between px-11">
