@@ -94,6 +94,14 @@ export default function InteractiveStacks() {
     return () => window.removeEventListener('click', handleWindowClick);
   }, [currentLine.active, currentLine.startElement]);
 
+  // If the mode changes to AddRemove, erase the drawn lines
+  useEffect(() => {
+    if (mode === 'addRemove') {
+      setCurrentLine(prev => ({ ...prev, active: false })); // clear the current line
+      setLines([]); // clear any drawn lines
+    }
+  }, [mode]);
+
   // This function is called when a user starts dragging an element
   const handleDragStart = (e: PointerEvent, elementId: string) => {
     // Only allow drawing if the control panel mode is set to draw
