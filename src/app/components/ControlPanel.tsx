@@ -1,22 +1,22 @@
-import type { SetStacks, ControlPanelProps, SetAnimate, ModeControllerProps } from "@/types";
+import type { SetStacks, ControlPanelProps, SetAnimate, ModeControllerProps, Mode } from "@/types";
 import { MAX_STACK_SIZE } from "./InteractiveStacks";
 import { SquarePlay } from "lucide-react";
 import { useModeStore } from "@/app/store/modeStore";
 
 // This controller allows the user to add or remove blocks from the stack
-const StackController = ({ stack, setStack }: { stack: number, setStack: SetStacks }) => {
+const StackController = ({ mode, stack, setStack }: { mode: Mode, stack: number, setStack: SetStacks }) => {
   return (
     <div className="flex items-center justify-center gap-x-2">
       <button
         onClick={() => setStack(stack - 1)}
-        disabled={stack === 0}
-        className="disabled:opacity-50 disabled:cursor-not-allowed text-xl font-bold"
+        disabled={stack === 0 || mode === 'draw'}
+        className="disabled:opacity-10 disabled:cursor-not-allowed text-xl font-bold"
       >-</button>
       <div className="text-lg font-bold border-2 border-gray-300 rounded-md px-4 py-1">{stack}</div>
       <button
         onClick={() => setStack(stack + 1)}
-        disabled={stack === MAX_STACK_SIZE}
-        className="disabled:opacity-50 disabled:cursor-not-allowed text-xl font-bold"
+        disabled={stack === MAX_STACK_SIZE || mode === 'draw'}
+        className="disabled:opacity-10 disabled:cursor-not-allowed text-xl font-bold"
       >+</button>
     </div >
   )
@@ -83,14 +83,14 @@ export default function ControlPanel({ leftStack, rightStack, setLeftStack, setR
 
   return (
     <div className="w-[80%] mx-auto mb-4">
-      <div className="flex justify-between items-center border-2 border-gray-300 rounded-md py-4">
+      <div className="flex justify-between items-center bg-[#f2fbff] border-4 border-sky-100 rounded-md py-4">
         <div className="w-1/4 flex items-center justify-center">
           <ModeControllerRadio mode={mode} setMode={setMode} />
         </div>
         <div className="w-2/4 flex items-center justify-center gap-x-32">
-          <StackController stack={leftStack} setStack={setLeftStack} />
+          <StackController mode={mode} stack={leftStack} setStack={setLeftStack} />
           <div className="p-6"></div>
-          <StackController stack={rightStack} setStack={setRightStack} />
+          <StackController mode={mode} stack={rightStack} setStack={setRightStack} />
         </div>
         <div className="w-1/4 flex items-center justify-center">
           <AnimationController animate={animate} setAnimate={setAnimate} />
